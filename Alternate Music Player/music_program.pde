@@ -19,6 +19,7 @@ color purple = #2C08FF;
 //
 void setup() {
   //size() or fullScreen()
+  size(1600, 1200);
   //Display Algorithm
   String relativePathway = "FreeWare Music/MusicDownload/"; //Relative Path
   String absolutePath = sketchPath( relativePathway ); //Absolute Path
