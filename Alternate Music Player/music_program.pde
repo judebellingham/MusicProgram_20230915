@@ -16,10 +16,11 @@ AudioPlayer[] playList = new AudioPlayer[numberOfSongs]; //song is now similar t
 AudioMetaData[] playListMetaData = new AudioMetaData[numberOfSongs]; //same as above
 PFont generalFont;
 color red = #7C2020, blue = #69DBFC, resetColour = #FFFFFF;
+Boolean pauseBoolean = false;
 //
 void setup() {
   //size() or fullScreen()
-  size(900, 700);
+  size(750, 500);
   //Display Algorithm
   String relativePathway = "Audio/songs/"; //Relative Path
   String absolutePath = sketchPath( relativePathway ); //Absolute Path
@@ -65,20 +66,25 @@ void draw() {
   //println( "Song Position", song1.position(), "Song Length", song1.length() );
   //
   // songMetaData1.title()
-    generalFont = createFont ("Harrington", 55); //Must also Tools / Create Font / Find Font / Do Not Press "OK"
-  rect(width*1/4, height*0, width*1/2, height*3/10); //mistake
-   fill( blue );
+  generalFont = createFont ("Harrington", 55); //Must also Tools / Create Font / Find Font / Do Not Press "OK"
+  rect(width*1/4, height*0, width*1/2, height*3/10);
+  fill( blue );
   textAlign (CENTER, CENTER); //Align X&Y, see Processing.org / Reference
   //Values: [LEFT | CENTER | RIGHT] & [TOP | CENTER | BOTTOM | BASELINE]
   int size = 10; //Change this font size
-  textFont(generalFont, size); //Change the number until it fits, largest font size
+  textFont(generalFont, size);
   text(playListMetaData[currentSong].title(), width*1/4, height*0, width*1/2, height*3/10);
   fill(resetColour); //Reset to white for rest of the program
+  if (pauseBoolean == true) {
+    playList[currentSong].pause();
+  } else {
+    playList[currentSong].play();
+  }
 } //End draw
 //
 void keyPressed() {
   //Broken KeyBinds
-  if ( key=='P' || key=='p' ) playList[currentSong].play(); //Parameter is milli-seconds from start of audio file to start playing (illustrate with examples)
+  if ( key=='R' || key=='r' ) playList[currentSong].play(); //Parameter is milli-seconds from start of audio file to start playing (illustrate with examples)
   //.play() includes .rewind()
   //
   if ( key>='1' || key<='9' ) { //Loop Button, previous (key=='1' || key=='9')
@@ -139,23 +145,23 @@ void keyPressed() {
   }
   //
   if ( key=='F' || key=='f' ) playList[currentSong].skip( 5000 ); //SKIP forward 1 second (1000 milliseconds)
-  if ( key=='R' || key=='r' ) playList[currentSong].skip( -5000 ); //SKIP  backawrds 1 second, notice negative, (-1000 milliseconds)
+  if ( key=='B' || key=='b' ) playList[currentSong].skip( -5000 ); //SKIP  backawrds 1 second, notice negative, (-1000 milliseconds)
   //
   //Simple STOP Behaviour: ask if .playing() & .pause() & .rewind(), or .rewind()
   if ( key=='S' | key=='s' ) {
     if ( playList[currentSong].isPlaying() ) {
       playList[currentSong].pause(); //auto .rewind()
     } else {
-      playList[currentSong].rewind(); //Not Necessary
+      //Not Necessary
     }
   }
   //
   //Simple Pause Behaviour: .pause() & hold .position(), then PLAY
-  if ( key=='Y' | key=='y' ) {
-    if ( playList[currentSong].isPlaying()==true ) {
-      playList[currentSong].pause(); //auto .rewind()
+  if ( key==' ' ) {
+    if ( pauseBoolean == false ) {
+      pauseBoolean = true; //auto .rewind()
     } else {
-      playList[currentSong].play(); //ERROR, doesn't play
+      pauseBoolean = false; //ERROR, doesn't play
     }
   }
 } //End keyPressed
