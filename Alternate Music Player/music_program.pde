@@ -15,10 +15,12 @@ int numberOfSongs = 1, currentSong = 0; //Placeholder Only, reexecute lines afte
 AudioPlayer[] playList = new AudioPlayer[numberOfSongs]; //song is now similar to song1
 AudioMetaData[] playListMetaData = new AudioMetaData[numberOfSongs]; //same as above
 PFont generalFont;
-color red = #7C2020, blue = #69DBFC, resetColour = #FFFFFF;
-Boolean pauseBoolean = false;
+color red = #7C2020, blue = #69DBFC, resetColour = #FFFFFF, Gellow = #E9FA08;
+Boolean pauseBoolean = false, muteBoolean = false;
+PImage jude;
 //
 void setup() {
+  background(Gellow);
   //size() or fullScreen()
   size(750, 500);
   //Display Algorithm
@@ -52,6 +54,10 @@ void setup() {
     playListMetaData[i] = playList[i].getMetaData();
   } //End Music Load
   playList[currentSong].play();
+  //
+  //Images pathway
+  String imagePathway = "images/";
+  jude = loadImage(imagePathway + "jude.PNG");
 } //End setup
 //
 void draw() {
@@ -80,6 +86,7 @@ void draw() {
   } else {
     playList[currentSong].play();
   }
+  image(jude, width*1.26/5, height*3.1/9, width*1/2, height*1/2 );
 } //End draw
 //
 void keyPressed() {
@@ -98,17 +105,12 @@ void keyPressed() {
   if ( key=='L' || key=='l' ) playList[currentSong].loop(); //Infinite Loop, no parameter OR -1
   //
   if ( key=='M' || key=='m' ) { //MUTE Button
-    //MUTE Behaviour: stops electricty to speakers, does not stop file
-    //NOTE: MUTE has NO built-in PUASE button, NO built-in rewind button
-    //ERROR: if song near end of file, user will not know song is at the end
-    //Known ERROR: once song plays, MUTE acts like it doesn't work
     if ( playList[currentSong].isMuted() ) {
-      //ERROR: song might not be playing
-      //CATCH: ask .isPlaying() or !.isPlaying()
       playList[currentSong].unmute();
+      muteBoolean = false;
     } else {
-      //Possible ERROR: Might rewind the song
       playList[currentSong].mute();
+      muteBoolean = true;
     }
   } //End MUTE
   //
